@@ -1,0 +1,59 @@
+#!/usr/bin/env ruby
+
+require 'serper'
+require 'optparse'
+require 'json'
+require 'pp'
+require 'docopt'
+
+cmd = File.basename(__FILE__)
+
+doc = <<DOCOPT
+1. serper -s 'keyword' # search 'keyword' and print parse result
+2. serper -s 'keyword' -o output.json # -o means save result to a file
+3. serper -f 'file path' # parse html source code from file
+4. serper -s 'keyword' -j # search 'keyword' and print parse result in JSON format
+
+Usage:
+  #{cmd} [options]
+
+Options:
+  -h --help               show this help message and exit
+  -v --version            show version and exit
+  -a --analyse Name       analyse as the given name
+  --keywords File         uses with -a, import give keywords File before search
+  -s --search Keyword     search Keyword and show result
+  -f --file File          parse local file or given url
+  -j --json               print JSON output
+  -o --output File         output JSON result to File
+
+DOCOPT
+
+begin
+  options = Docopt::docopt(doc, version: Serper::VERSION)
+  # pp options
+rescue Docopt::Exit => e
+  puts e.message
+end
+
+result = ''
+if options['--analyse']
+  analyse = Serper.analyse(options['--analyse'])
+  analyse.import_keywords(options('--keywords'))
+  analyse.search
+  result = 'Analyse finished!'
+elsif options['--search']
+  result = Serper.search options['--search']
+elsif options['--file']
+  result = Serper.parse_file options['--file']
+else
+  puts "At least given one of -a/-s/-f"
+end
+
+if options['--json']
+  puts result.to_json
+else
+  pp result
+end
+
+open(options['--output'],'w').puts result.to_json if options['--output']
