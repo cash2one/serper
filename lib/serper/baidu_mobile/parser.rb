@@ -1,6 +1,6 @@
 class Serper::BaiduMobile
 
-  def _parse_ads_top(file)
+  def parse_ads_top(file)
     result = []
     rank = 0
 
@@ -45,7 +45,7 @@ class Serper::BaiduMobile
     result
   end
 
-  def _parse_ads_bottom(file)
+  def parse_ads_bottom(file)
     result = []
     rank = 0
 

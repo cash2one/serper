@@ -5,8 +5,8 @@ require "serper/analyser"
 module Serper
   ENGINES = {
       :baidu => Baidu = Class.new,
-      :baidu_mobile => BaiduMobile = Class.new,
-      :qihu360 => Qihu360 = Class.new
+      :qihu360 => Qihu360 = Class.new,
+      :baidu_mobile => BaiduMobile = Class.new
   }
 
   ENGINES.keys.each do |engine_name|
