@@ -27,7 +27,7 @@ class Serper::BaiduMobile
           r[:url] = r[:site]
         else
           sleep(rand)
-          r[:url] = HTTParty.get(url['href']).request.last_uri.to_s
+          r[:url] = HTTParty.get(URI.escape(url['href'])).request.last_uri.to_s
       end
 
       title = ''
