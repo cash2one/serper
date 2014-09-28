@@ -27,15 +27,14 @@ class Serper::BaiduMobile
     rank = 0
 
     cache = file[:doc].search('div.ec_wise_ad')
-    case cache
-      when nil
-        return result
-      else
-        cache[0].css('div.ec_resitem').each do |div|
-          rank += 1
-          url = div.css('span.ec_site').text
-          result << {url: url, rank: rank}
-        end
+    if cache.blank?
+      return result
+    else
+      cache[0].css('div.ec_resitem').each do |div|
+        rank += 1
+        url = div.css('span.ec_site').text
+        result << {url: url, rank: rank}
+      end
     end
     result
   end
@@ -75,7 +74,7 @@ class Serper::BaiduMobile
     rank = 0
 
     cache = file[:doc].search('div.ec_wise_ad')
-    case cache.to_a.length
+    case cache.length
       when 0,1
         return result
       else
