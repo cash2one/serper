@@ -5,10 +5,10 @@ class Serper::BaiduMobile
     return nil if url.nil?
     begin
       url = URI.escape(url['href'])
-      trans = Nokogiri::HTML(HTTParty.get(url))
+      trans = HTTParty.get(url)
       url = trans.request.last_uri.to_s
       if /^http:\/\/m\.baidu\.com\// === url
-        url = URI.escape(trans.css('a#tc_ori')[0].href)
+        url = URI.escape(Nokogiri::HTML(trans).css('a#tc_ori')[0].href)
         url = HTTParty.get(url).request.last_uri.to_s
       end
     rescue
