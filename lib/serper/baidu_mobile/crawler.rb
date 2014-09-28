@@ -16,8 +16,9 @@ module Serper
                 'Referer' => 'http://m.baidu.com/',
                 'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3'
             }).body
-        raise if result.empty
-      rescue
+        raise if result.nil?
+      rescue StandardError,TimeoutError
+        pp 'ERROR!',$!
         sleep(rand(3))
         n = n - 1
         retry if n > 0
