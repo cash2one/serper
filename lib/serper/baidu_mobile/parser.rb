@@ -12,8 +12,8 @@ class Serper::BaiduMobile
         url = HTTParty.get(url).request.last_uri.to_s
       end
     rescue
-      pp url
-      pp $!
+      puts url
+      puts $!
       url = URI.escape($!.to_s[/http:\/\/.+/]) || url
     end
     url
@@ -38,12 +38,12 @@ class Serper::BaiduMobile
   end
 
   def _parse_ranks(file)
-    pp 'parsing ranks...'
+    puts 'parsing ranks...'
     n = 0
     result = []
     rank = 0
 
-    pp file[:doc].request if file[:doc].search('div.resitem').empty?
+    puts file[:doc].request if file[:doc].search('div.resitem').empty?
     file[:doc].search('div.resitem').each do |div|
       rank += 1
       r = {}
@@ -54,7 +54,7 @@ class Serper::BaiduMobile
         title = title + ele.text if nil == ele['class']
       end
 
-      pp n = n + 1
+      puts n = n + 1
       r[:url] = url_follow(url)
       r[:site] = div.css('span.site').text
       r[:name] = div['tpl'] || 'ranks'
@@ -64,7 +64,7 @@ class Serper::BaiduMobile
 
       result << r
     end
-    pp 'ranks parsed.'
+    puts 'ranks parsed.'
     result
   end
 
