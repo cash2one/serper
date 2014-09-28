@@ -9,14 +9,14 @@ class Serper::BaiduMobile
       url = trans.request.last_uri.to_s
       if /^http:\/\/m\.baidu\.com\// === url
         jumper = Nokogiri::HTML(trans).css('a#tc_ori')[0]
-        unless jumper.nil?
-          url = URI.escape(jumper.href)
+        unless jumper.nil? or jumper.name != 'a'
+          url = URI.escape(jumper['href'])
           url = HTTParty.get(url).request.last_uri.to_s
         end
       end
-    rescue
+    rescue StandardError,TimeoutError
       puts url
-      puts $!
+      puts $!.to_s
       url = URI.escape($!.to_s[/http:\/\/.+/]) if $!.to_s.start_with?('bad URI')
     end
     url
