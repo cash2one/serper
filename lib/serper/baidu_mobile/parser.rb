@@ -1,6 +1,6 @@
 class Serper::BaiduMobile
 
-  #百度转码跟踪原页面
+  #百度跳转跟踪原页面
   def url_follow(url)
     return nil if url.nil?
     begin
@@ -8,8 +8,11 @@ class Serper::BaiduMobile
       trans = HTTParty.get(url)
       url = trans.request.last_uri.to_s
       if /^http:\/\/m\.baidu\.com\// === url
-        url = URI.escape(Nokogiri::HTML(trans).css('a#tc_ori')[0].href)
-        url = HTTParty.get(url).request.last_uri.to_s
+        jumper = Nokogiri::HTML(trans).css('a#tc_ori')[0]
+        unless jumper.nil?
+          url = URI.escape(jumper.href)
+          url = HTTParty.get(url).request.last_uri.to_s
+        end
       end
     rescue
       puts url
@@ -43,7 +46,6 @@ class Serper::BaiduMobile
     result = []
     rank = 0
 
-    puts file[:doc].request if file[:doc].search('div.resitem').empty?
     file[:doc].search('div.resitem').each do |div|
       rank += 1
       r = {}
