@@ -43,7 +43,7 @@ module Serper
           puts e.class
           puts e.message
           sleep(10)
-          retry
+          response = self.class.get_serp(url,retries - 1)
         end
 
         if response.code != 200
@@ -56,7 +56,7 @@ module Serper
         if response.nil?
           puts "Still error after 3 tries, sleep 3600s now."
           sleep(3600)
-          response = self.class.get_serp(url)
+          response = self.class.get_serp(url,retries - 1)
         end
 
         ##Baidu Stopped response Content-Length in headers...
