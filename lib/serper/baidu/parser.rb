@@ -16,7 +16,7 @@ class Serper::Baidu
     rank = 0
 
     file[:doc].search('div#content_left').first.children.each do |div|
-      break if div['id'].to_i > 0
+      break if [1..3000].include?(div['id'].to_i)
       div.search('span a.c-icon.efc-cert').each do |div|
         rank += 1
         url = Addressable::URI.parse(Serper::Helper.parse_data_click(div['data-renzheng'])['identity']['a']['url']).query_values['wd'].to_s.sub('@v', '') rescue ''
